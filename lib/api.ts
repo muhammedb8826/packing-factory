@@ -1,4 +1,8 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+// In browser use /api (proxied to json-server). On server (SSR) hit json-server directly.
+const API_BASE =
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:3001"
+    : process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 async function fetchApi<T>(
   path: string,

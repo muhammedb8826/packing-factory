@@ -27,9 +27,16 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Use **New job order** to create a job and get a tracking number, **Dashboard** to see all job orders, and **Client: Preferences** to set notification/dashboard/reporting options.
 
-Optional: set `NEXT_PUBLIC_API_URL=http://localhost:3001/api` if your API runs elsewhere.
+Optional: set `NEXT_PUBLIC_API_URL=http://localhost:3001` if your API runs elsewhere.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Single process (e.g. cPanel):** In production, one Node process runs both Next.js and the API. Build then start:
+
+```bash
+npm run build
+npm start
+```
+
+This runs `node server.js`, which starts json-server internally and proxies `/api/*` to it. Set `PORT` (and optionally `API_PORT`) in your environment. To run only Next.js and no API in-process, use `RUN_API_IN_PROCESS=0 npm start` or `npm run start:next` (and run `npm run server` separately).
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
