@@ -63,6 +63,7 @@ export interface JobOrder {
   productionStarted: string | null;
   qcStatus: string | null;
   dispatchReady: string | null;
+  dispatchedAt: string | null;
   financialCompleted: string | null;
 }
 

@@ -45,6 +45,7 @@ const data = {
     { title: "Inventory – Issue materials", url: "/inventory", icon: IconPackage },
     { title: "Production", url: "/production", icon: IconTool },
     { title: "QC", url: "/qc", icon: IconZoomCheck },
+    { title: "Dispatch", url: "/dispatch", icon: IconTruck },
     { title: "Client: New job order", url: "/client/job-order/new", icon: IconFileDescription },
     { title: "Client: Preferences", url: "/client/preferences", icon: IconUserCircle },
     { title: "Track job", url: "/dashboard", icon: IconTruck },

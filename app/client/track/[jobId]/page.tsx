@@ -132,6 +132,18 @@ export default async function ClientTrackPage({
                 <span>{job.qcStatus ?? job.status}</span>
               </li>
             )}
+            {job.dispatchReady && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">Ready for dispatch</span>
+                <span>{new Date(job.dispatchReady).toLocaleString()}</span>
+              </li>
+            )}
+            {job.dispatchedAt && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">Dispatched</span>
+                <span>{new Date(job.dispatchedAt).toLocaleString()}</span>
+              </li>
+            )}
           </ul>
         </CardContent>
       </Card>

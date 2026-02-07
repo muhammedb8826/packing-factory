@@ -18,6 +18,7 @@ import { HrAssignLaborSheet } from "@/components/hr-assign-labor-sheet";
 import { InventoryIssueSheet } from "@/components/inventory-issue-sheet";
 import { ProductionManageSheet } from "@/components/production-manage-sheet";
 import { QcRecordSheet } from "@/components/qc-record-sheet";
+import { DispatchSheet } from "@/components/dispatch-sheet";
 
 const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   submitted: "secondary",
@@ -43,6 +44,8 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
   const [productionSheetOpen, setProductionSheetOpen] = useState(false);
   const [qcJob, setQcJob] = useState<JobOrder | null>(null);
   const [qcSheetOpen, setQcSheetOpen] = useState(false);
+  const [dispatchJob, setDispatchJob] = useState<JobOrder | null>(null);
+  const [dispatchSheetOpen, setDispatchSheetOpen] = useState(false);
 
   const openApproveSheet = (job: JobOrder) => {
     setApproveJob(job);
@@ -67,6 +70,11 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
   const openQcSheet = (job: JobOrder) => {
     setQcJob(job);
     setQcSheetOpen(true);
+  };
+
+  const openDispatchSheet = (job: JobOrder) => {
+    setDispatchJob(job);
+    setDispatchSheetOpen(true);
   };
 
   if (initialData.length === 0) {
@@ -97,8 +105,9 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
               <TableHead>Inventory ready</TableHead>
               <TableHead>Production</TableHead>
               <TableHead>QC</TableHead>
+              <TableHead>Dispatch</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="w-[260px]">Actions</TableHead>
+              <TableHead className="w-[280px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -154,6 +163,13 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
                   )}
                 </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
+                  {job.status === "dispatched" && job.dispatchedAt
+                    ? new Date(job.dispatchedAt).toLocaleDateString()
+                    : job.dispatchReady
+                      ? "Ready"
+                      : "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
                   {new Date(job.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="flex flex-wrap gap-1">
@@ -202,6 +218,15 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
                       QC
                     </Button>
                   )}
+                  {(job.status === "qc_done" || job.status === "ready_dispatch") && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => openDispatchSheet(job)}
+                    >
+                      Dispatch
+                    </Button>
+                  )}
                   <Button variant="ghost" size="sm" asChild>
                     <Link href={`/client/track/${encodeURIComponent(job.jobId)}`}>
                       Track
@@ -237,6 +262,11 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
         job={qcJob}
         open={qcSheetOpen}
         onOpenChange={setQcSheetOpen}
+      />
+      <DispatchSheet
+        job={dispatchJob}
+        open={dispatchSheetOpen}
+        onOpenChange={setDispatchSheetOpen}
       />
     </>
   );

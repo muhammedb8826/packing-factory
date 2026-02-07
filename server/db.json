@@ -28,7 +28,7 @@
       "id": "1",
       "jobId": "JO-2025-00001",
       "clientId": 1,
-      "status": "qc_done",
+      "status": "dispatched",
       "specifications": {
         "productType": "carton",
         "quantity": 10000,
@@ -45,7 +45,8 @@
       "inventoryReady": true,
       "productionStarted": "2026-02-07T08:44:35.623Z",
       "qcStatus": "pass",
-      "dispatchReady": null,
+      "dispatchReady": "2026-02-07T08:52:41.419Z",
+      "dispatchedAt": "2026-02-07T08:52:54.783Z",
       "financialCompleted": null
     },
     {
@@ -70,6 +71,7 @@
       "productionStarted": null,
       "qcStatus": null,
       "dispatchReady": null,
+      "dispatchedAt": null,
       "financialCompleted": null
     }
   ],
