@@ -2,7 +2,7 @@
 const getApiBase = () => {
   const url = process.env.NEXT_PUBLIC_API_URL;
   if (typeof window === "undefined") {
-    return url && url !== "" ? url : "http://127.0.0.1:3001";
+    return url && url !== "" ? url : "https://packing-api.qenenia.com";
   }
   return url && url !== "" ? url : "/api";
 };

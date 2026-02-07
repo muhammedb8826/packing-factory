@@ -5,7 +5,7 @@ import next from 'next'
 
 const port = parseInt(process.env.PORT || '4000', 10)
 // Backend API URL (e.g. your NestJS app). Default: http://127.0.0.1:3001
-const apiBackendUrl = process.env.API_BACKEND_URL || 'http://127.0.0.1:3001'
+const apiBackendUrl = process.env.API_BACKEND_URL || 'https://packing-api.qenenia.com'
 const dev = process.env.NODE_ENV !== 'production'
 
 const app = next({ dev })
