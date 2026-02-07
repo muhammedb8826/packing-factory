@@ -44,7 +44,7 @@ export default async function DashboardPage() {
               <div className="px-4 lg:px-6">
                 {error ? (
                   <p className="text-destructive text-sm">
-                    {error}. Make sure JSON Server is running: <code className="rounded bg-muted px-1">npm run server</code>
+                    {error}. Ensure your API backend is running (see docs/NESTJS-INTEGRATION.md).
                   </p>
                 ) : (
                   <JobOrdersList initialData={jobOrders} />

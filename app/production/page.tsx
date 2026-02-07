@@ -34,7 +34,7 @@ export default async function ProductionPage() {
       </div>
       {error ? (
         <p className="text-destructive text-sm">
-          {error}. Ensure JSON Server is running: <code className="rounded bg-muted px-1">npm run server</code>
+          {error}. Ensure your API backend is running (see docs/NESTJS-INTEGRATION.md).
         </p>
       ) : (
         <JobOrdersList initialData={jobOrders} />

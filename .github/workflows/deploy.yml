@@ -25,7 +25,7 @@ jobs:
       run: |
         rm -f .env.production
         {
-          echo "NEXT_PUBLIC_API_URL=https://asal-api.qenenia.com";
+          echo "NEXT_PUBLIC_API_URL=https://packing-api.qenenia.com";
         } >> .env.production
 
     - name: Build Next.js app

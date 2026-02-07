@@ -32,7 +32,7 @@ export default function Home() {
         </Link>
       </div>
       <p className="text-center text-muted-foreground text-sm">
-        Run <code className="rounded bg-muted px-1.5 py-0.5">npm run server</code> for JSON Server (port 3001).
+        Connect to your API backend (e.g. NestJS). See docs/NESTJS-INTEGRATION.md.
       </p>
     </div>
   );

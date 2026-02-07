@@ -1,64 +1,66 @@
 # Packaging Factory
 
-Job order and production tracking for the packaging industry (carton, plastic, flexible, etc.). Built with Next.js and JSON Server.
+Job order and production tracking for the packaging industry (carton, plastic, flexible, etc.). **Next.js frontend** ready to integrate with your API backend (e.g. NestJS).
 
 ## Modules (priority order)
 
 1. **Client (MNC)** – Submit job orders, get Job ID, set user preferences (notification, dashboard view, reporting, access level).
 2. **Job Order System** – Generates Job ID, records client & specs, applies preferences, notifies COE/Management.
 3. **COE / Management** – Approve jobs, assign to Production & HR (UI to be extended).
-4. **HR, Inventory, Production, QC, Dispatch, Financial** – Stub data in `server/db.json`; implement in later phases.
+4. **HR, Inventory, Production, QC, Dispatch, Financial** – Labor, materials, production logs, QC, dispatch, invoices.
 5. **Client Tracking Dashboard** – DHL-style tracking by Job ID.
 6. **Reporting & Analytics** – Job-wise revenue, shift labor, inventory, financials (to be extended).
 
 ## Getting Started
 
-**1. Start JSON Server** (API on port 3001):
+The frontend expects a REST API. Use your own backend (e.g. **NestJS**). Full API contract and integration steps: **[docs/NESTJS-INTEGRATION.md](docs/NESTJS-INTEGRATION.md)**.
+
+**1. Start your API backend** (e.g. NestJS on port 3001):
 
 ```bash
-npm run server
+# In your NestJS project (or other backend)
+npm run start:dev
 ```
 
-**2. Start the Next.js app** (in another terminal):
+**2. Start the Next.js app:**
 
 ```bash
+# Option A: Next.js only (set API URL to your backend)
+echo NEXT_PUBLIC_API_URL=http://localhost:3001 >> .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Use **New job order** to create a job and get a tracking number, **Dashboard** to see all job orders, and **Client: Preferences** to set notification/dashboard/reporting options.
+Open [http://localhost:3000](http://localhost:3000).
 
-Optional: set `NEXT_PUBLIC_API_URL=http://localhost:3001` if your API runs elsewhere.
-
-**Single process (one command):** You can also run both the app and the API with one command (handy locally or on cPanel):
+**Option B: Custom server (proxy /api to backend)**  
+Useful when you want same-origin `/api` and the Node server to proxy to your backend:
 
 ```bash
-npm run build   # then for production:
+# Backend must be running (e.g. NestJS on 3001)
+export API_BACKEND_URL=http://127.0.0.1:3001   # optional; default is this
+npm run build
 npm start
 ```
 
-Or for local dev with the custom server (Next.js + API in one process):
+This runs `node server.js`: it **proxies `/api/*` to `API_BACKEND_URL`** (default `http://127.0.0.1:3001`). Set `PORT` (default 4000) and `API_BACKEND_URL` if your backend is elsewhere.
 
-```bash
-npm start
-```
+**If you see API 404 or "API backend unavailable":** (1) Start your backend first. (2) With custom server, set `API_BACKEND_URL` if the backend is not at `http://127.0.0.1:3001`. (3) Do not set `NEXT_PUBLIC_API_URL` to an empty string; use `"/api"` or your backend URL.
 
-This runs `node server.js`, which **starts json-server automatically** and proxies `/api/*` to it. Set `PORT` (default 4000) and optionally `API_PORT` (default 3001) in your environment. To run only Next.js and no API, use `RUN_API_IN_PROCESS=0 npm start` or `npm run start:next` (and run `npm run server` in another terminal).
+## Reference
 
-**If you see "Cannot GET /jobOrders" or API 404:** (1) Use `npm start` (custom server), not `next start`. (2) Do not set `NEXT_PUBLIC_API_URL` to an empty string; leave it unset or set to `"/api"` for same-origin requests.
+- **API contract and types:** [docs/NESTJS-INTEGRATION.md](docs/NESTJS-INTEGRATION.md)
+- **Frontend API client:** `lib/api.ts`
+- **Shared types:** `lib/types.ts`
+- **Sample data shape (for seeding backend):** `server/db.json`
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Learn Next.js](https://nextjs.org/learn)
+- [Next.js GitHub](https://github.com/vercel/next.js)
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying). For a self-hosted or cPanel setup, run `npm run build && npm start` and ensure your API backend is deployed and `API_BACKEND_URL` (or `NEXT_PUBLIC_API_URL`) is set correctly.

@@ -1,57 +1,34 @@
 import http from 'http'
+import https from 'https'
 import { parse } from 'url'
-import { spawn } from 'child_process'
-import path from 'path'
 import next from 'next'
 
 const port = parseInt(process.env.PORT || '4000', 10)
-const apiPort = parseInt(process.env.API_PORT || '3001', 10)
+// Backend API URL (e.g. your NestJS app). Default: http://127.0.0.1:3001
+const apiBackendUrl = process.env.API_BACKEND_URL || 'http://127.0.0.1:3001'
 const dev = process.env.NODE_ENV !== 'production'
-// Start json-server by default when using this server (npm start). Set RUN_API_IN_PROCESS=0 to disable.
-const runApiInProcess = process.env.RUN_API_IN_PROCESS !== '0'
 
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-async function main() {
-  if (runApiInProcess) {
-    const dbPath = path.join(process.cwd(), 'server', 'db.json')
-    const apiProcess = spawn(
-      'npx',
-      ['json-server', dbPath, '--port', String(apiPort)],
-      {
-        stdio: 'inherit',
-        shell: true,
-        cwd: process.cwd(),
-      }
-    )
-    apiProcess.on('error', (err) =>
-      console.error('json-server start error:', err)
-    )
-    apiProcess.on('exit', (code) => {
-      if (code !== 0 && code !== null)
-        console.error('json-server exited with code', code)
-    })
-    await new Promise((r) => setTimeout(r, 1500))
-    console.log(`> API (json-server) on http://127.0.0.1:${apiPort}`)
-  }
-
-  await app.prepare()
-
+function main() {
   const server = http.createServer((req, res) => {
     const parsedUrl = parse(req.url || '', true)
     const pathname = parsedUrl.pathname || ''
 
     if (pathname.startsWith('/api/')) {
       const apiPath = pathname.slice(4) + (parsedUrl.search || '')
+      const backend = new URL(apiPath, apiBackendUrl)
+      const isHttps = backend.protocol === 'https:'
+      const client = isHttps ? https : http
       const opts = {
-        hostname: '127.0.0.1',
-        port: apiPort,
-        path: apiPath,
+        hostname: backend.hostname,
+        port: backend.port || (isHttps ? 443 : 80),
+        path: backend.pathname + backend.search,
         method: req.method,
-        headers: { ...req.headers, host: `127.0.0.1:${apiPort}` },
+        headers: { ...req.headers, host: backend.host },
       }
-      const proxyReq = http.request(opts, (proxyRes) => {
+      const proxyReq = client.request(opts, (proxyRes) => {
         res.writeHead(proxyRes.statusCode, proxyRes.headers)
         proxyRes.pipe(res)
       })
@@ -60,7 +37,7 @@ async function main() {
         res.writeHead(502, { 'Content-Type': 'application/json' })
         res.end(
           JSON.stringify({
-            error: 'API server unavailable. Is json-server running?',
+            error: 'API backend unavailable. Is your backend running? Set API_BACKEND_URL if needed.',
           })
         )
       })
@@ -72,14 +49,11 @@ async function main() {
   })
   server.listen(port)
 
-  console.log(
-    `> Server listening at http://localhost:${port} as ${
-      dev ? 'development' : process.env.NODE_ENV
-    }`
-  )
+  console.log(`> Server listening at http://localhost:${port}`)
+  console.log(`> /api/* proxied to ${apiBackendUrl}`)
 }
 
-main().catch((err) => {
+app.prepare().then(main).catch((err) => {
   console.error(err)
   process.exit(1)
 })

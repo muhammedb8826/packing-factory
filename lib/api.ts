@@ -1,4 +1,4 @@
-// In browser use /api (proxied to json-server). On server (SSR) hit json-server directly.
+// In browser use /api (proxied to your API backend). On server (SSR) uses same base or direct backend URL.
 const getApiBase = () => {
   const url = process.env.NEXT_PUBLIC_API_URL;
   if (typeof window === "undefined") {
