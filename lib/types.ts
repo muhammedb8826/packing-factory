@@ -96,3 +96,43 @@ export interface LaborAssignment {
   shiftId: number | string;
   assignedAt: string;
 }
+
+// Inventory / Store module
+export interface Material {
+  id: number | string;
+  code: string;
+  name: string;
+  unit: string;
+  quantityInStock: number;
+  minThreshold?: number;
+  createdAt: string;
+}
+
+export interface MaterialIssue {
+  id: number | string;
+  jobOrderId: number | string;
+  materialId: number | string;
+  quantity: number;
+  issuedAt: string;
+}
+
+// Production module
+export interface ProductionLog {
+  id: number | string;
+  jobOrderId: number | string;
+  shiftId: number | string;
+  quantityProduced: number;
+  notes?: string;
+  loggedAt: string;
+}
+
+// Quality Control module
+export type QcResult = "pass" | "rework";
+
+export interface QcRecord {
+  id: number | string;
+  jobOrderId: number | string;
+  result: QcResult;
+  notes?: string;
+  checkedAt: string;
+}

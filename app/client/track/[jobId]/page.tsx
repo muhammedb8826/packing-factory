@@ -114,6 +114,24 @@ export default async function ClientTrackPage({
                 <span>Labor assigned; job can proceed to Inventory</span>
               </li>
             )}
+            {job.inventoryReady && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">Inventory ready</span>
+                <span>Materials issued; production can start</span>
+              </li>
+            )}
+            {job.productionStarted && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">Production started</span>
+                <span>{new Date(job.productionStarted).toLocaleString()}</span>
+              </li>
+            )}
+            {(job.status === "qc_pending" || job.status === "qc_done" || job.qcStatus) && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">QC</span>
+                <span>{job.qcStatus ?? job.status}</span>
+              </li>
+            )}
           </ul>
         </CardContent>
       </Card>

@@ -28,7 +28,7 @@
       "id": "1",
       "jobId": "JO-2025-00001",
       "clientId": 1,
-      "status": "inventory_pending",
+      "status": "qc_done",
       "specifications": {
         "productType": "carton",
         "quantity": 10000,
@@ -42,9 +42,9 @@
       "assignedToProduction": "Line A, Shift 1",
       "assignedToHR": "HR Team",
       "hrReady": true,
-      "inventoryReady": false,
-      "productionStarted": null,
-      "qcStatus": null,
+      "inventoryReady": true,
+      "productionStarted": "2026-02-07T08:44:35.623Z",
+      "qcStatus": "pass",
       "dispatchReady": null,
       "financialCompleted": null
     },
@@ -75,7 +75,7 @@
   ],
   "employees": [
     {
-      "id": 1,
+      "id": "1",
       "code": "EMP-001",
       "name": "Alex Kumar",
       "skills": [
@@ -87,7 +87,7 @@
       "createdAt": "2025-01-10T09:00:00.000Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "code": "EMP-002",
       "name": "Maria Santos",
       "skills": [
@@ -99,7 +99,7 @@
       "createdAt": "2025-01-10T09:00:00.000Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "code": "EMP-003",
       "name": "James Chen",
       "skills": [
@@ -111,24 +111,61 @@
       "createdAt": "2025-01-10T09:00:00.000Z"
     }
   ],
-  "materials": [],
+  "materials": [
+    {
+      "id": "1",
+      "code": "MAT-001",
+      "name": "Kraft paper",
+      "unit": "kg",
+      "quantityInStock": 4990,
+      "minThreshold": 500,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "code": "MAT-002",
+      "name": "LDPE film",
+      "unit": "kg",
+      "quantityInStock": 2000,
+      "minThreshold": 200,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "code": "MAT-003",
+      "name": "Ink (carton)",
+      "unit": "L",
+      "quantityInStock": 500,
+      "minThreshold": 50,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "code": "MAT-004",
+      "name": "Adhesive",
+      "unit": "kg",
+      "quantityInStock": 800,
+      "minThreshold": 100,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    }
+  ],
   "shifts": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Shift 1 (Morning)",
       "startTime": "06:00",
       "endTime": "14:00",
       "createdAt": "2025-01-10T09:00:00.000Z"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Shift 2 (Afternoon)",
       "startTime": "14:00",
       "endTime": "22:00",
       "createdAt": "2025-01-10T09:00:00.000Z"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Shift 3 (Night)",
       "startTime": "22:00",
       "endTime": "06:00",
@@ -144,9 +181,32 @@
       "assignedAt": "2026-02-07T08:34:20.428Z"
     }
   ],
-  "materialIssues": [],
-  "productionLogs": [],
-  "qcRecords": [],
+  "materialIssues": [
+    {
+      "id": "a782",
+      "jobOrderId": "1",
+      "materialId": "1",
+      "quantity": 10,
+      "issuedAt": "2026-02-07T08:39:25.114Z"
+    }
+  ],
+  "productionLogs": [
+    {
+      "id": "0499",
+      "jobOrderId": "1",
+      "shiftId": "1",
+      "quantityProduced": 10000,
+      "loggedAt": "2026-02-07T08:48:00.961Z"
+    }
+  ],
+  "qcRecords": [
+    {
+      "id": "321d",
+      "jobOrderId": "1",
+      "result": "pass",
+      "checkedAt": "2026-02-07T08:48:58.608Z"
+    }
+  ],
   "dispatchRecords": [],
   "invoices": []
 }

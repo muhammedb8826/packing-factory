@@ -85,6 +85,57 @@ export const api = {
     }),
   deleteLaborAssignment: (id: number | string) =>
     fetchApi<unknown>(`/laborAssignments/${id}`, { method: "DELETE" }),
+
+  // Inventory / Store
+  getMaterials: () =>
+    fetchApi<Array<import("@/lib/types").Material>>("/materials"),
+  getMaterial: (id: number | string) =>
+    fetchApi<import("@/lib/types").Material>(`/materials/${id}`),
+  updateMaterial: (
+    id: number | string,
+    data: Partial<import("@/lib/types").Material>
+  ) =>
+    fetchApi<import("@/lib/types").Material>(`/materials/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  getMaterialIssues: (jobOrderId: number | string) =>
+    fetchApi<Array<import("@/lib/types").MaterialIssue>>(
+      `/materialIssues?jobOrderId=${encodeURIComponent(String(jobOrderId))}`
+    ),
+  createMaterialIssue: (
+    body: Omit<import("@/lib/types").MaterialIssue, "id">
+  ) =>
+    fetchApi<import("@/lib/types").MaterialIssue>("/materialIssues", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  // Production
+  getProductionLogs: (jobOrderId: number | string) =>
+    fetchApi<Array<import("@/lib/types").ProductionLog>>(
+      `/productionLogs?jobOrderId=${encodeURIComponent(String(jobOrderId))}`
+    ),
+  createProductionLog: (
+    body: Omit<import("@/lib/types").ProductionLog, "id">
+  ) =>
+    fetchApi<import("@/lib/types").ProductionLog>("/productionLogs", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  // Quality Control
+  getQcRecords: (jobOrderId: number | string) =>
+    fetchApi<Array<import("@/lib/types").QcRecord>>(
+      `/qcRecords?jobOrderId=${encodeURIComponent(String(jobOrderId))}`
+    ),
+  createQcRecord: (
+    body: Omit<import("@/lib/types").QcRecord, "id">
+  ) =>
+    fetchApi<import("@/lib/types").QcRecord>("/qcRecords", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
 };
 
 /** Generate next Job ID (e.g. JO-2025-00001) from existing job orders */

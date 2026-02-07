@@ -9,11 +9,14 @@ import {
   IconFileDescription,
   IconHelp,
   IconInnerShadowTop,
+  IconPackage,
   IconReport,
   IconSettings,
+  IconTool,
   IconTruck,
   IconUserCircle,
   IconUsersGroup,
+  IconZoomCheck,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -39,6 +42,9 @@ const data = {
   navMain: [
     { title: "Dashboard", url: "/dashboard", icon: IconDashboard },
     { title: "HR – Assign labor", url: "/hr", icon: IconUsersGroup },
+    { title: "Inventory – Issue materials", url: "/inventory", icon: IconPackage },
+    { title: "Production", url: "/production", icon: IconTool },
+    { title: "QC", url: "/qc", icon: IconZoomCheck },
     { title: "Client: New job order", url: "/client/job-order/new", icon: IconFileDescription },
     { title: "Client: Preferences", url: "/client/preferences", icon: IconUserCircle },
     { title: "Track job", url: "/dashboard", icon: IconTruck },

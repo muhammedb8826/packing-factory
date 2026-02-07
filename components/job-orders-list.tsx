@@ -15,6 +15,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CoeApproveAssignSheet } from "@/components/coe-approve-assign-sheet";
 import { HrAssignLaborSheet } from "@/components/hr-assign-labor-sheet";
+import { InventoryIssueSheet } from "@/components/inventory-issue-sheet";
+import { ProductionManageSheet } from "@/components/production-manage-sheet";
+import { QcRecordSheet } from "@/components/qc-record-sheet";
 
 const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   submitted: "secondary",
@@ -34,6 +37,12 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [laborJob, setLaborJob] = useState<JobOrder | null>(null);
   const [hrSheetOpen, setHrSheetOpen] = useState(false);
+  const [inventoryJob, setInventoryJob] = useState<JobOrder | null>(null);
+  const [inventorySheetOpen, setInventorySheetOpen] = useState(false);
+  const [productionJob, setProductionJob] = useState<JobOrder | null>(null);
+  const [productionSheetOpen, setProductionSheetOpen] = useState(false);
+  const [qcJob, setQcJob] = useState<JobOrder | null>(null);
+  const [qcSheetOpen, setQcSheetOpen] = useState(false);
 
   const openApproveSheet = (job: JobOrder) => {
     setApproveJob(job);
@@ -43,6 +52,21 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
   const openHrSheet = (job: JobOrder) => {
     setLaborJob(job);
     setHrSheetOpen(true);
+  };
+
+  const openInventorySheet = (job: JobOrder) => {
+    setInventoryJob(job);
+    setInventorySheetOpen(true);
+  };
+
+  const openProductionSheet = (job: JobOrder) => {
+    setProductionJob(job);
+    setProductionSheetOpen(true);
+  };
+
+  const openQcSheet = (job: JobOrder) => {
+    setQcJob(job);
+    setQcSheetOpen(true);
   };
 
   if (initialData.length === 0) {
@@ -70,8 +94,11 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
               <TableHead>Status</TableHead>
               <TableHead>Assigned to</TableHead>
               <TableHead>HR ready</TableHead>
+              <TableHead>Inventory ready</TableHead>
+              <TableHead>Production</TableHead>
+              <TableHead>QC</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="w-[180px]">Actions</TableHead>
+              <TableHead className="w-[260px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -99,6 +126,34 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
                   )}
                 </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
+                  {job.inventoryReady ? (
+                    <Badge variant="outline" className="font-normal">Yes</Badge>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
+                  {job.productionStarted
+                    ? new Date(job.productionStarted).toLocaleDateString()
+                    : "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
+                  {job.qcStatus ? (
+                    <Badge
+                      variant="outline"
+                      className={
+                        job.qcStatus === "pass"
+                          ? "border-green-500 text-green-700 dark:text-green-400"
+                          : "border-amber-500 text-amber-700 dark:text-amber-400"
+                      }
+                    >
+                      {job.qcStatus}
+                    </Badge>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
                   {new Date(job.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="flex flex-wrap gap-1">
@@ -118,6 +173,33 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
                       onClick={() => openHrSheet(job)}
                     >
                       Assign labor
+                    </Button>
+                  )}
+                  {job.status === "inventory_pending" && !job.inventoryReady && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => openInventorySheet(job)}
+                    >
+                      Issue materials
+                    </Button>
+                  )}
+                  {job.status === "in_production" && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => openProductionSheet(job)}
+                    >
+                      Manage production
+                    </Button>
+                  )}
+                  {job.status === "qc_pending" && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => openQcSheet(job)}
+                    >
+                      QC
                     </Button>
                   )}
                   <Button variant="ghost" size="sm" asChild>
@@ -140,6 +222,21 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
         job={laborJob}
         open={hrSheetOpen}
         onOpenChange={setHrSheetOpen}
+      />
+      <InventoryIssueSheet
+        job={inventoryJob}
+        open={inventorySheetOpen}
+        onOpenChange={setInventorySheetOpen}
+      />
+      <ProductionManageSheet
+        job={productionJob}
+        open={productionSheetOpen}
+        onOpenChange={setProductionSheetOpen}
+      />
+      <QcRecordSheet
+        job={qcJob}
+        open={qcSheetOpen}
+        onOpenChange={setQcSheetOpen}
       />
     </>
   );
