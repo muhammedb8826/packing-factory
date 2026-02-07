@@ -1,0 +1,85 @@
+{
+  "clients": [
+    {
+      "id": "1",
+      "code": "MNC-001",
+      "name": "Acme Packaging Corp",
+      "contact": "John Smith",
+      "email": "john@acme.com",
+      "phone": "+1-555-0100",
+      "address": "123 Industrial Ave, City",
+      "createdAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "userPreferences": [
+    {
+      "id": "1",
+      "clientId": 1,
+      "notificationType": "email",
+      "dashboardView": "progress",
+      "reportingFrequency": "weekly",
+      "accessLevel": "full",
+      "createdAt": "2025-01-15T10:00:00.000Z",
+      "updatedAt": "2025-01-15T10:00:00.000Z"
+    }
+  ],
+  "jobOrders": [
+    {
+      "id": "1",
+      "jobId": "JO-2025-00001",
+      "clientId": 1,
+      "status": "approved",
+      "specifications": {
+        "productType": "carton",
+        "quantity": 10000,
+        "dimensions": "30x20x15 cm",
+        "material": "kraft",
+        "finish": "matte",
+        "notes": "First trial order"
+      },
+      "createdAt": "2025-02-01T09:00:00.000Z",
+      "approvedAt": "2026-02-07T08:25:38.461Z",
+      "assignedToProduction": "Line A, Shift 1",
+      "assignedToHR": "HR Team",
+      "hrReady": false,
+      "inventoryReady": false,
+      "productionStarted": null,
+      "qcStatus": null,
+      "dispatchReady": null,
+      "financialCompleted": null
+    },
+    {
+      "id": "0214",
+      "jobId": "JO-2026-00001",
+      "clientId": 1,
+      "status": "submitted",
+      "specifications": {
+        "productType": "flexible",
+        "quantity": 1,
+        "dimensions": "30x20x15cm",
+        "material": "",
+        "finish": "",
+        "notes": ""
+      },
+      "createdAt": "2026-02-07T08:18:40.601Z",
+      "approvedAt": null,
+      "assignedToProduction": null,
+      "assignedToHR": null,
+      "hrReady": false,
+      "inventoryReady": false,
+      "productionStarted": null,
+      "qcStatus": null,
+      "dispatchReady": null,
+      "financialCompleted": null
+    }
+  ],
+  "employees": [],
+  "materials": [],
+  "shifts": [],
+  "laborAssignments": [],
+  "materialIssues": [],
+  "productionLogs": [],
+  "qcRecords": [],
+  "dispatchRecords": [],
+  "invoices": []
+}
