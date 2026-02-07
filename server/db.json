@@ -28,7 +28,7 @@
       "id": "1",
       "jobId": "JO-2025-00001",
       "clientId": 1,
-      "status": "dispatched",
+      "status": "financial_completed",
       "specifications": {
         "productType": "carton",
         "quantity": 10000,
@@ -47,7 +47,7 @@
       "qcStatus": "pass",
       "dispatchReady": "2026-02-07T08:52:41.419Z",
       "dispatchedAt": "2026-02-07T08:52:54.783Z",
-      "financialCompleted": null
+      "financialCompleted": "2026-02-07T09:00:48.785Z"
     },
     {
       "id": "0214",
@@ -210,5 +210,26 @@
     }
   ],
   "dispatchRecords": [],
-  "invoices": []
+  "invoices": [
+    {
+      "id": "44a3",
+      "jobOrderId": "1",
+      "clientId": 1,
+      "amount": 1000,
+      "type": "full",
+      "status": "paid",
+      "paidAt": "2026-02-07T09:00:43.317Z",
+      "createdAt": "2026-02-07T09:00:35.574Z"
+    },
+    {
+      "id": "69d4",
+      "jobOrderId": "1",
+      "clientId": 1,
+      "amount": 5855,
+      "type": "full",
+      "status": "paid",
+      "paidAt": "2026-02-07T09:01:07.245Z",
+      "createdAt": "2026-02-07T09:01:03.802Z"
+    }
+  ]
 }

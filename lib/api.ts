@@ -136,6 +136,34 @@ export const api = {
       method: "POST",
       body: JSON.stringify(body),
     }),
+
+  // Financial
+  getInvoices: () =>
+    fetchApi<Array<import("@/lib/types").Invoice>>("/invoices"),
+  getInvoicesByJobOrderId: (jobOrderId: number | string) =>
+    fetchApi<Array<import("@/lib/types").Invoice>>(
+      `/invoices?jobOrderId=${encodeURIComponent(String(jobOrderId))}`
+    ),
+  createInvoice: (
+    body: Omit<import("@/lib/types").Invoice, "id" | "createdAt" | "paidAt"> & { status?: import("@/lib/types").InvoiceStatus }
+  ) =>
+    fetchApi<import("@/lib/types").Invoice>("/invoices", {
+      method: "POST",
+      body: JSON.stringify({
+        ...body,
+        status: body.status ?? "pending",
+        paidAt: body.status === "paid" ? new Date().toISOString() : null,
+        createdAt: new Date().toISOString(),
+      }),
+    }),
+  updateInvoice: (
+    id: number | string,
+    data: Partial<import("@/lib/types").Invoice>
+  ) =>
+    fetchApi<import("@/lib/types").Invoice>(`/invoices/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
 };
 
 /** Generate next Job ID (e.g. JO-2025-00001) from existing job orders */

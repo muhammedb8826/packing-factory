@@ -144,6 +144,12 @@ export default async function ClientTrackPage({
                 <span>{new Date(job.dispatchedAt).toLocaleString()}</span>
               </li>
             )}
+            {job.financialCompleted && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">Financial completed</span>
+                <span>{new Date(job.financialCompleted).toLocaleString()}</span>
+              </li>
+            )}
           </ul>
         </CardContent>
       </Card>

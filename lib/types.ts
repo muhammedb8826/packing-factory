@@ -137,3 +137,18 @@ export interface QcRecord {
   notes?: string;
   checkedAt: string;
 }
+
+// Financial module
+export type InvoiceType = "advance" | "full";
+export type InvoiceStatus = "pending" | "paid";
+
+export interface Invoice {
+  id: number | string;
+  jobOrderId: number | string;
+  clientId: number | string;
+  amount: number;
+  type: InvoiceType;
+  status: InvoiceStatus;
+  paidAt: string | null;
+  createdAt: string;
+}
