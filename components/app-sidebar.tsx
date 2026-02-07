@@ -51,7 +51,7 @@ const data = {
     { title: "Client: New job order", url: "/client/job-order/new", icon: IconFileDescription },
     { title: "Client: Preferences", url: "/client/preferences", icon: IconUserCircle },
     { title: "Track job", url: "/dashboard", icon: IconTruck },
-    { title: "Reporting", url: "/dashboard", icon: IconChartBar },
+    { title: "Reporting", url: "/reporting", icon: IconChartBar },
   ],
   navSecondary: [
     { title: "Settings", url: "/client/preferences", icon: IconSettings },
@@ -59,7 +59,7 @@ const data = {
   ],
   documents: [
     { name: "Job orders", url: "/dashboard", icon: IconDatabase },
-    { name: "Reports", url: "/dashboard", icon: IconReport },
+    { name: "Reports", url: "/reporting", icon: IconReport },
   ],
 }
 
