@@ -70,6 +70,7 @@ export function JobOrderForm() {
           productionStarted: null,
           qcStatus: null,
           dispatchReady: null,
+          dispatchedAt: null,
           financialCompleted: null,
         };
         await api.createJobOrder(newOrder);
