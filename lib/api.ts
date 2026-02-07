@@ -66,6 +66,25 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
+
+  // HR
+  getEmployees: () =>
+    fetchApi<Array<import("@/lib/types").Employee>>("/employees"),
+  getShifts: () =>
+    fetchApi<Array<import("@/lib/types").Shift>>("/shifts"),
+  getLaborAssignments: (jobOrderId: number | string) =>
+    fetchApi<Array<import("@/lib/types").LaborAssignment>>(
+      `/laborAssignments?jobOrderId=${encodeURIComponent(String(jobOrderId))}`
+    ),
+  createLaborAssignment: (
+    body: Omit<import("@/lib/types").LaborAssignment, "id">
+  ) =>
+    fetchApi<import("@/lib/types").LaborAssignment>("/laborAssignments", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  deleteLaborAssignment: (id: number | string) =>
+    fetchApi<unknown>(`/laborAssignments/${id}`, { method: "DELETE" }),
 };
 
 /** Generate next Job ID (e.g. JO-2025-00001) from existing job orders */

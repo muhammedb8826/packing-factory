@@ -70,3 +70,29 @@ export interface CreateJobOrderInput {
   clientId: number;
   specifications: JobSpecifications;
 }
+
+// HR module
+export interface Employee {
+  id: number | string;
+  code: string;
+  name: string;
+  skills: string[];
+  available: boolean;
+  createdAt: string;
+}
+
+export interface Shift {
+  id: number | string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+}
+
+export interface LaborAssignment {
+  id: number | string;
+  jobOrderId: number | string;
+  employeeId: number | string;
+  shiftId: number | string;
+  assignedAt: string;
+}

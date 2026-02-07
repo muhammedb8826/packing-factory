@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CoeApproveAssignSheet } from "@/components/coe-approve-assign-sheet";
+import { HrAssignLaborSheet } from "@/components/hr-assign-labor-sheet";
 
 const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   submitted: "secondary",
@@ -31,10 +32,17 @@ const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | 
 export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
   const [approveJob, setApproveJob] = useState<JobOrder | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [laborJob, setLaborJob] = useState<JobOrder | null>(null);
+  const [hrSheetOpen, setHrSheetOpen] = useState(false);
 
   const openApproveSheet = (job: JobOrder) => {
     setApproveJob(job);
     setSheetOpen(true);
+  };
+
+  const openHrSheet = (job: JobOrder) => {
+    setLaborJob(job);
+    setHrSheetOpen(true);
   };
 
   if (initialData.length === 0) {
@@ -61,6 +69,7 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
               <TableHead>Quantity</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Assigned to</TableHead>
+              <TableHead>HR ready</TableHead>
               <TableHead>Created</TableHead>
               <TableHead className="w-[180px]">Actions</TableHead>
             </TableRow>
@@ -83,6 +92,13 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
                     : "—"}
                 </TableCell>
                 <TableCell className="text-muted-foreground text-sm">
+                  {job.hrReady ? (
+                    <Badge variant="outline" className="font-normal">Yes</Badge>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
                   {new Date(job.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell className="flex flex-wrap gap-1">
@@ -93,6 +109,15 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
                       onClick={() => openApproveSheet(job)}
                     >
                       Approve & assign
+                    </Button>
+                  )}
+                  {job.status === "approved" && !job.hrReady && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={() => openHrSheet(job)}
+                    >
+                      Assign labor
                     </Button>
                   )}
                   <Button variant="ghost" size="sm" asChild>
@@ -110,6 +135,11 @@ export function JobOrdersList({ initialData }: { initialData: JobOrder[] }) {
         job={approveJob}
         open={sheetOpen}
         onOpenChange={setSheetOpen}
+      />
+      <HrAssignLaborSheet
+        job={laborJob}
+        open={hrSheetOpen}
+        onOpenChange={setHrSheetOpen}
       />
     </>
   );

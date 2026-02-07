@@ -28,7 +28,7 @@
       "id": "1",
       "jobId": "JO-2025-00001",
       "clientId": 1,
-      "status": "approved",
+      "status": "inventory_pending",
       "specifications": {
         "productType": "carton",
         "quantity": 10000,
@@ -41,7 +41,7 @@
       "approvedAt": "2026-02-07T08:25:38.461Z",
       "assignedToProduction": "Line A, Shift 1",
       "assignedToHR": "HR Team",
-      "hrReady": false,
+      "hrReady": true,
       "inventoryReady": false,
       "productionStarted": null,
       "qcStatus": null,
@@ -73,10 +73,77 @@
       "financialCompleted": null
     }
   ],
-  "employees": [],
+  "employees": [
+    {
+      "id": 1,
+      "code": "EMP-001",
+      "name": "Alex Kumar",
+      "skills": [
+        "carton",
+        "cutting",
+        "folding"
+      ],
+      "available": true,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "code": "EMP-002",
+      "name": "Maria Santos",
+      "skills": [
+        "plastic",
+        "sealing",
+        "QC"
+      ],
+      "available": true,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "code": "EMP-003",
+      "name": "James Chen",
+      "skills": [
+        "carton",
+        "flexible",
+        "dispatch"
+      ],
+      "available": true,
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    }
+  ],
   "materials": [],
-  "shifts": [],
-  "laborAssignments": [],
+  "shifts": [
+    {
+      "id": 1,
+      "name": "Shift 1 (Morning)",
+      "startTime": "06:00",
+      "endTime": "14:00",
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Shift 2 (Afternoon)",
+      "startTime": "14:00",
+      "endTime": "22:00",
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Shift 3 (Night)",
+      "startTime": "22:00",
+      "endTime": "06:00",
+      "createdAt": "2025-01-10T09:00:00.000Z"
+    }
+  ],
+  "laborAssignments": [
+    {
+      "id": "26b6",
+      "jobOrderId": "1",
+      "employeeId": "1",
+      "shiftId": "1",
+      "assignedAt": "2026-02-07T08:34:20.428Z"
+    }
+  ],
   "materialIssues": [],
   "productionLogs": [],
   "qcRecords": [],

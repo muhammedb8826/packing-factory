@@ -108,6 +108,12 @@ export default async function ClientTrackPage({
                 </span>
               </li>
             )}
+            {job.hrReady && (
+              <li className="flex items-center gap-2">
+                <span className="text-muted-foreground">HR ready</span>
+                <span>Labor assigned; job can proceed to Inventory</span>
+              </li>
+            )}
           </ul>
         </CardContent>
       </Card>

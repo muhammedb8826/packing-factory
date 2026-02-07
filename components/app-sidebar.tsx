@@ -13,6 +13,7 @@ import {
   IconSettings,
   IconTruck,
   IconUserCircle,
+  IconUsersGroup,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -37,6 +38,7 @@ const data = {
   },
   navMain: [
     { title: "Dashboard", url: "/dashboard", icon: IconDashboard },
+    { title: "HR – Assign labor", url: "/hr", icon: IconUsersGroup },
     { title: "Client: New job order", url: "/client/job-order/new", icon: IconFileDescription },
     { title: "Client: Preferences", url: "/client/preferences", icon: IconUserCircle },
     { title: "Track job", url: "/dashboard", icon: IconTruck },
