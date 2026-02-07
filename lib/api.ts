@@ -1,8 +1,12 @@
 // In browser use /api (proxied to json-server). On server (SSR) hit json-server directly.
-const API_BASE =
-  typeof window === "undefined"
-    ? process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:3001"
-    : process.env.NEXT_PUBLIC_API_URL ?? "/api";
+const getApiBase = () => {
+  const url = process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window === "undefined") {
+    return url && url !== "" ? url : "http://127.0.0.1:3001";
+  }
+  return url && url !== "" ? url : "/api";
+};
+const API_BASE = getApiBase();
 
 async function fetchApi<T>(
   path: string,

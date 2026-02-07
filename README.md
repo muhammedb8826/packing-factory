@@ -29,14 +29,22 @@ Open [http://localhost:3000](http://localhost:3000). Use **New job order** to cr
 
 Optional: set `NEXT_PUBLIC_API_URL=http://localhost:3001` if your API runs elsewhere.
 
-**Single process (e.g. cPanel):** In production, one Node process runs both Next.js and the API. Build then start:
+**Single process (one command):** You can also run both the app and the API with one command (handy locally or on cPanel):
 
 ```bash
-npm run build
+npm run build   # then for production:
 npm start
 ```
 
-This runs `node server.js`, which starts json-server internally and proxies `/api/*` to it. Set `PORT` (and optionally `API_PORT`) in your environment. To run only Next.js and no API in-process, use `RUN_API_IN_PROCESS=0 npm start` or `npm run start:next` (and run `npm run server` separately).
+Or for local dev with the custom server (Next.js + API in one process):
+
+```bash
+npm start
+```
+
+This runs `node server.js`, which **starts json-server automatically** and proxies `/api/*` to it. Set `PORT` (default 4000) and optionally `API_PORT` (default 3001) in your environment. To run only Next.js and no API, use `RUN_API_IN_PROCESS=0 npm start` or `npm run start:next` (and run `npm run server` in another terminal).
+
+**If you see "Cannot GET /jobOrders" or API 404:** (1) Use `npm start` (custom server), not `next start`. (2) Do not set `NEXT_PUBLIC_API_URL` to an empty string; leave it unset or set to `"/api"` for same-origin requests.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

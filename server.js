@@ -7,8 +7,8 @@ import next from 'next'
 const port = parseInt(process.env.PORT || '4000', 10)
 const apiPort = parseInt(process.env.API_PORT || '3001', 10)
 const dev = process.env.NODE_ENV !== 'production'
-const runApiInProcess =
-  process.env.RUN_API_IN_PROCESS === '1' || process.env.NODE_ENV === 'production'
+// Start json-server by default when using this server (npm start). Set RUN_API_IN_PROCESS=0 to disable.
+const runApiInProcess = process.env.RUN_API_IN_PROCESS !== '0'
 
 const app = next({ dev })
 const handle = app.getRequestHandler()
