@@ -3,7 +3,7 @@ name: Deploy Next.js App to cPanel via FTP
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   web-deploy:
