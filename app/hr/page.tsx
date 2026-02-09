@@ -1,18 +1,20 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { JobOrdersList } from "@/components/job-orders-list";
-import { api } from "@/lib/api";
+import { useGetJobOrdersQuery } from "@/lib/apiSlice";
 
-export default async function HrPage() {
-  let jobOrders: Awaited<ReturnType<typeof api.getJobOrders>> = [];
-  let error: string | null = null;
-  try {
-    jobOrders = await api.getJobOrders();
-  } catch (e) {
-    error = e instanceof Error ? e.message : "Failed to load job orders";
-  }
+export default function HrPage() {
+  const {
+    data: jobOrders,
+    isLoading,
+    isError,
+    error,
+  } = useGetJobOrdersQuery();
 
-  const needsLabor = jobOrders.filter(
+  const list = jobOrders ?? [];
+  const needsLabor = list.filter(
     (j) => j.status === "approved" && !j.hrReady
   );
 
@@ -20,9 +22,12 @@ export default async function HrPage() {
     <div className="flex flex-1 flex-col gap-6 p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">HR – Assign labor</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            HR – Assign labor
+          </h1>
           <p className="text-muted-foreground text-sm">
-            Assign shift-wise labor to approved jobs. No labor = job cannot start. Mark HR ready when done.
+            Assign shift-wise labor to approved jobs. No labor = job cannot
+            start. Mark HR ready when done.
           </p>
           {needsLabor.length > 0 && (
             <p className="mt-1 text-sm text-amber-600 dark:text-amber-500">
@@ -34,12 +39,17 @@ export default async function HrPage() {
           <Link href="/dashboard">Dashboard</Link>
         </Button>
       </div>
-      {error ? (
+      {isLoading ? (
+        <p className="text-muted-foreground text-sm">
+          Loading job orders from API…
+        </p>
+      ) : isError ? (
         <p className="text-destructive text-sm">
-          {error}. Ensure your API backend is running (see docs/NESTJS-INTEGRATION.md).
+          {(error as Error).message}. Ensure your API backend is running (see
+          docs/NESTJS-INTEGRATION.md).
         </p>
       ) : (
-        <JobOrdersList initialData={jobOrders} />
+        <JobOrdersList initialData={list} />
       )}
     </div>
   );

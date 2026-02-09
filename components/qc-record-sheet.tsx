@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder, QcRecord } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,7 +29,7 @@ export function QcRecordSheet({
   open,
   onOpenChange,
 }: QcRecordSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [records, setRecords] = useState<QcRecord[]>([]);
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState<"pass" | "rework" | null>(null);
@@ -57,6 +58,7 @@ export function QcRecordSheet({
         qcStatus: result,
         status: result === "pass" ? "qc_done" : "qc_pending",
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       if (result === "pass") {
         toast.success(`Job ${job.jobId} passed QC. Ready for dispatch.`);
         handleOpenChange(false);
@@ -66,7 +68,6 @@ export function QcRecordSheet({
         setRecords(list);
         setNotes("");
       }
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to record QC");
     } finally {

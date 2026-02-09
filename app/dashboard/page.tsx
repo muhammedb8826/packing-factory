@@ -1,20 +1,11 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { JobOrdersList } from "@/components/job-orders-list";
-import { api } from "@/lib/api";
+import { DashboardJobOrders } from "@/components/dashboard-job-orders";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default async function DashboardPage() {
-  let jobOrders: Awaited<ReturnType<typeof api.getJobOrders>> = [];
-  let error: string | null = null;
-  try {
-    jobOrders = await api.getJobOrders();
-  } catch (e) {
-    error = e instanceof Error ? e.message : "Failed to load job orders";
-  }
-
+export default function DashboardPage() {
   return (
     <SidebarProvider
       style={
@@ -32,9 +23,12 @@ export default async function DashboardPage() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="flex flex-wrap items-center justify-between gap-4 px-4 lg:px-6">
                 <div>
-                  <h1 className="text-2xl font-semibold tracking-tight">Job orders</h1>
+                  <h1 className="text-2xl font-semibold tracking-tight">
+                    Job orders
+                  </h1>
                   <p className="text-muted-foreground text-sm">
-                    All job orders (COE/Management view). Approve and assign to Production & HR.
+                    All job orders (COE/Management view). Approve and assign to
+                    Production & HR.
                   </p>
                 </div>
                 <Button asChild>
@@ -42,13 +36,7 @@ export default async function DashboardPage() {
                 </Button>
               </div>
               <div className="px-4 lg:px-6">
-                {error ? (
-                  <p className="text-destructive text-sm">
-                    {error}. Ensure your API backend is running (see docs/NESTJS-INTEGRATION.md).
-                  </p>
-                ) : (
-                  <JobOrdersList initialData={jobOrders} />
-                )}
+                <DashboardJobOrders />
               </div>
             </div>
           </div>

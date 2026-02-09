@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder, Invoice } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +36,7 @@ export function FinancialSheet({
   open,
   onOpenChange,
 }: FinancialSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [invoiceType, setInvoiceType] = useState<"advance" | "full">("full");
   const [amount, setAmount] = useState("");
@@ -99,9 +100,9 @@ export function FinancialSheet({
         status: "financial_completed",
         financialCompleted: new Date().toISOString(),
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} marked financial completed.`);
       onOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to update");
     } finally {

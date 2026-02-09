@@ -1,8 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -25,7 +26,7 @@ export function DispatchSheet({
   open,
   onOpenChange,
 }: DispatchSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleMarkReadyForDispatch = async () => {
     if (!job) return;
@@ -34,9 +35,9 @@ export function DispatchSheet({
         status: "ready_dispatch",
         dispatchReady: new Date().toISOString(),
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} marked ready for dispatch. Client can be notified per preferences.`);
       onOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to update");
     }
@@ -49,9 +50,9 @@ export function DispatchSheet({
         status: "dispatched",
         dispatchedAt: new Date().toISOString(),
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} marked as dispatched. Client notification sent per preferences.`);
       onOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to update");
     }

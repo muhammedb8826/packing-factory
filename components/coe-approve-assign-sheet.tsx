@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,7 +29,7 @@ export function CoeApproveAssignSheet({
   open,
   onOpenChange,
 }: CoeApproveAssignSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [assignedToProduction, setAssignedToProduction] = useState("");
   const [assignedToHR, setAssignedToHR] = useState("");
   const [saving, setSaving] = useState(false);
@@ -52,9 +53,9 @@ export function CoeApproveAssignSheet({
         assignedToProduction: assignedToProduction.trim() || null,
         assignedToHR: assignedToHR.trim() || null,
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} approved and assigned.`);
       handleOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to approve job");
     } finally {

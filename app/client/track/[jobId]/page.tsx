@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { api } from "@/lib/api";
+import { useGetJobOrdersQuery } from "@/lib/apiSlice";
+import type { JobOrder } from "@/lib/types";
 
 const STATUS_LABELS: Record<string, string> = {
   submitted: "Submitted",
@@ -18,21 +21,53 @@ const STATUS_LABELS: Record<string, string> = {
   financial_completed: "Completed",
 };
 
-export default async function ClientTrackPage({
-  params,
-}: {
-  params: Promise<{ jobId: string }>;
-}) {
-  const { jobId } = await params;
-  const decoded = decodeURIComponent(jobId);
-  let orders: Awaited<ReturnType<typeof api.getJobOrderByJobId>>;
-  try {
-    orders = await api.getJobOrderByJobId(decoded);
-  } catch {
-    notFound();
+export default function ClientTrackPage() {
+  const params = useParams<{ jobId: string }>();
+  const decoded = decodeURIComponent(params.jobId);
+  const { data, isLoading, isError, error } = useGetJobOrdersQuery();
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 flex-col gap-6 p-6">
+        <p className="text-muted-foreground text-sm">
+          Loading job from API…
+        </p>
+      </div>
+    );
   }
-  const job = orders[0];
-  if (!job) notFound();
+
+  if (isError) {
+    return (
+      <div className="flex flex-1 flex-col gap-6 p-6">
+        <p className="text-destructive text-sm">
+          {(error as Error).message}. Ensure your API backend is running.
+        </p>
+      </div>
+    );
+  }
+
+  const orders = (data ?? []) as JobOrder[];
+  const job = orders.find((j) => j.jobId === decoded);
+
+  if (!job) {
+    return (
+      <div className="flex flex-1 flex-col gap-6 p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Track job</h1>
+            <p className="font-mono text-muted-foreground">{decoded}</p>
+          </div>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard">Dashboard</Link>
+          </Button>
+        </div>
+        <p className="text-muted-foreground text-sm">
+          No job found for this Job ID. It may have been removed or not yet
+          created.
+        </p>
+      </div>
+    );
+  }
 
   const statusLabel = STATUS_LABELS[job.status] ?? job.status;
 

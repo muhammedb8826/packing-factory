@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder, Shift, ProductionLog } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +36,7 @@ export function ProductionManageSheet({
   open,
   onOpenChange,
 }: ProductionManageSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [logs, setLogs] = useState<ProductionLog[]>([]);
   const [selectedShiftId, setSelectedShiftId] = useState<string>("");
@@ -65,8 +66,8 @@ export function ProductionManageSheet({
       await api.updateJobOrder(job.id, {
         productionStarted: new Date().toISOString(),
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success("Production started.");
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to start");
     } finally {
@@ -111,9 +112,9 @@ export function ProductionManageSheet({
       await api.updateJobOrder(job.id, {
         status: "qc_pending",
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} sent to QC.`);
       onOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to send to QC");
     } finally {

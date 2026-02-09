@@ -1,8 +1,10 @@
-// In browser use /api (proxied to your API backend). On server (SSR) uses same base or direct backend URL.
+// In browser use /api (proxied to your API backend). On server (SSR) use same base or API_BACKEND_URL.
 const getApiBase = () => {
   const url = process.env.NEXT_PUBLIC_API_URL;
   if (typeof window === "undefined") {
-    return url && url !== "" ? url : "https://packing-api.qenenia.com";
+    if (url && url !== "") return url;
+    const backend = process.env.API_BACKEND_URL;
+    return backend && backend !== "" ? backend : "/api";
   }
   return url && url !== "" ? url : "/api";
 };
@@ -21,7 +23,13 @@ async function fetchApi<T>(
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`API ${res.status}: ${text}`);
+    const isJson = res.headers.get("content-type")?.includes("application/json");
+    const message = isJson
+      ? text
+      : text.startsWith("<!")
+        ? `API backend returned ${res.status} (non-JSON). Is your backend running at ${API_BASE}?`
+        : text.slice(0, 200);
+    throw new Error(`API ${res.status}: ${message}`);
   }
   return res.json() as Promise<T>;
 }

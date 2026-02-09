@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder, Material, MaterialIssue } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +36,7 @@ export function InventoryIssueSheet({
   open,
   onOpenChange,
 }: InventoryIssueSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [materials, setMaterials] = useState<Material[]>([]);
   const [issues, setIssues] = useState<MaterialIssue[]>([]);
   const [selectedMaterialId, setSelectedMaterialId] = useState<string>("");
@@ -107,9 +108,9 @@ export function InventoryIssueSheet({
         inventoryReady: true,
         status: "in_production",
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} inventory ready. Production can start.`);
       handleOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to mark ready");
     } finally {

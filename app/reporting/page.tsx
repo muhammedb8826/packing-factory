@@ -1,5 +1,7 @@
+"use client";
+
 import Link from "next/link";
-import { api } from "@/lib/api";
+import { useGetJobOrdersQuery, useGetInvoicesQuery } from "@/lib/apiSlice";
 import {
   Card,
   CardContent,
@@ -34,18 +36,29 @@ function invoicedByJob(invoices: Invoice[]): Record<string, number> {
   return map;
 }
 
-export default async function ReportingPage() {
-  let jobOrders: JobOrder[] = [];
-  let invoices: Invoice[] = [];
-  let error: string | null = null;
-  try {
-    [jobOrders, invoices] = await Promise.all([
-      api.getJobOrders(),
-      api.getInvoices(),
-    ]);
-  } catch (e) {
-    error = e instanceof Error ? e.message : "Failed to load data";
-  }
+export default function ReportingPage() {
+  const {
+    data: jobOrdersData,
+    isLoading: jobsLoading,
+    isError: jobsError,
+    error: jobsErrorObj,
+  } = useGetJobOrdersQuery();
+  const {
+    data: invoicesData,
+    isLoading: invoicesLoading,
+    isError: invoicesError,
+    error: invoicesErrorObj,
+  } = useGetInvoicesQuery();
+
+  const loading = jobsLoading || invoicesLoading;
+  const isError = jobsError || invoicesError;
+  const errorMessage =
+    (jobsErrorObj as Error | undefined)?.message ??
+    (invoicesErrorObj as Error | undefined)?.message ??
+    "Failed to load data";
+
+  const jobOrders: JobOrder[] = jobOrdersData ?? [];
+  const invoices: Invoice[] = invoicesData ?? [];
 
   const statusCounts = byStatus(jobOrders);
   const totalInvoiced = invoices.reduce((s, i) => s + i.amount, 0);
@@ -55,15 +68,23 @@ export default async function ReportingPage() {
   return (
     <div className="flex flex-1 flex-col gap-6 p-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Reporting & analytics</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Reporting & analytics
+        </h1>
         <p className="text-muted-foreground text-sm">
-          Job-wise summary, revenue, and status. Respects user preferences for report visibility.
+          Job-wise summary, revenue, and status. Respects user preferences for
+          report visibility.
         </p>
       </div>
 
-      {error ? (
+      {loading ? (
+        <p className="text-muted-foreground text-sm">
+          Loading reporting data from API…
+        </p>
+      ) : isError ? (
         <p className="text-destructive text-sm">
-          {error}. Ensure your API backend is running (see docs/NESTJS-INTEGRATION.md).
+          {errorMessage}. Ensure your API backend is running (see
+          docs/NESTJS-INTEGRATION.md).
         </p>
       ) : (
         <>

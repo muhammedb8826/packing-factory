@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import type { JobOrder, Employee, Shift, LaborAssignment } from "@/lib/types";
 import { api } from "@/lib/api";
+import { packingApi } from "@/lib/apiSlice";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -34,7 +35,7 @@ export function HrAssignLaborSheet({
   open,
   onOpenChange,
 }: HrAssignLaborSheetProps) {
-  const router = useRouter();
+  const dispatch = useDispatch();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [shifts, setShifts] = useState<Shift[]>([]);
   const [assignments, setAssignments] = useState<LaborAssignment[]>([]);
@@ -107,9 +108,9 @@ export function HrAssignLaborSheet({
         hrReady: true,
         status: "inventory_pending",
       });
+      dispatch(packingApi.util.invalidateTags(["JobOrders"]));
       toast.success(`Job ${job.jobId} marked HR ready. Job can proceed to Inventory.`);
       handleOpenChange(false);
-      router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to mark ready");
     } finally {
