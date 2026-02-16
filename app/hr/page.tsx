@@ -23,7 +23,7 @@ export default function HrPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            HR – Assign labor
+            Production Manager
           </h1>
           <p className="text-muted-foreground text-sm">
             Assign shift-wise labor to approved jobs. No labor = job cannot

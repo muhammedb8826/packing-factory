@@ -42,7 +42,7 @@ const data = {
   },
   navMain: [
     { title: "Dashboard", url: "/dashboard", icon: IconDashboard },
-    { title: "HR – Assign labor", url: "/hr", icon: IconUsersGroup },
+    { title: "Production Manager", url: "/hr", icon: IconUsersGroup },
     { title: "Inventory – Issue materials", url: "/inventory", icon: IconPackage },
     { title: "Production", url: "/production", icon: IconTool },
     { title: "QC", url: "/qc", icon: IconZoomCheck },
